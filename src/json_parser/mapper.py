@@ -7,7 +7,7 @@
 #     result = gaze_data_from_dict(json.loads(json_string))
 
 from dataclasses import dataclass
-from typing import Any, List, TypeVar, Type, cast, Callable
+from typing import Any, List, TypeVar, Callable
 
 T = TypeVar("T")
 
@@ -17,28 +17,9 @@ def from_float(x: Any) -> float:
     return float(x)
 
 
-def from_union(fs, x):
-    for f in fs:
-        try:
-            return f(x)
-        except:
-            pass
-    assert False
-
-
-def to_float(x: Any) -> float:
-    assert isinstance(x, float)
-    return x
-
-
 def from_int(x: Any) -> int:
     assert isinstance(x, int) and not isinstance(x, bool)
     return x
-
-
-def to_class(c: Type[T], x: Any) -> dict:
-    assert isinstance(x, c)
-    return cast(Any, x).to_dict()
 
 
 def from_list(f: Callable[[Any], T], x: Any) -> List[T]:
@@ -69,13 +50,6 @@ class PositionInCoordinates:
         z = from_float(obj.get("Z"))
         return PositionInCoordinates(x, y, z)
 
-    def to_dict(self) -> dict:
-        result: dict = {}
-        result["X"] = to_float(self.x)
-        result["Y"] = to_float(self.y)
-        result["Z"] = to_float(self.z)
-        return result
-
 
 @dataclass
 class GazeOrigin:
@@ -90,14 +64,6 @@ class GazeOrigin:
         position_in_track_box_coordinates = PositionInCoordinates.from_dict(obj.get("PositionInTrackBoxCoordinates"))
         validity = from_int(obj.get("Validity"))
         return GazeOrigin(position_in_user_coordinates, position_in_track_box_coordinates, validity)
-
-    def to_dict(self) -> dict:
-        result: dict = {}
-        result["PositionInUserCoordinates"] = to_class(PositionInCoordinates, self.position_in_user_coordinates)
-        result["PositionInTrackBoxCoordinates"] = to_class(PositionInCoordinates,
-                                                           self.position_in_track_box_coordinates)
-        result["Validity"] = from_int(self.validity)
-        return result
 
 
 @dataclass
@@ -114,12 +80,6 @@ class PositionOnDisplayArea:
         y = from_float(obj.get("Y"))
         return PositionOnDisplayArea(x, y)
 
-    def to_dict(self) -> dict:
-        result: dict = {}
-        result["X"] = to_float(self.x)
-        result["Y"] = to_float(self.y)
-        return result
-
 
 @dataclass
 class GazePoint:
@@ -135,13 +95,6 @@ class GazePoint:
         validity = from_int(obj.get("Validity"))
         return GazePoint(position_on_display_area, position_in_user_coordinates, validity)
 
-    def to_dict(self) -> dict:
-        result: dict = {}
-        result["PositionOnDisplayArea"] = to_class(PositionOnDisplayArea, self.position_on_display_area)
-        result["PositionInUserCoordinates"] = to_class(PositionInCoordinates, self.position_in_user_coordinates)
-        result["Validity"] = from_int(self.validity)
-        return result
-
 
 @dataclass
 class TEye:
@@ -155,17 +108,12 @@ class TEye:
         gaze_origin = GazeOrigin.from_dict(obj.get("GazeOrigin"))
         return TEye(gaze_point, gaze_origin)
 
-    def to_dict(self) -> dict:
-        result: dict = {}
-        result["GazePoint"] = to_class(GazePoint, self.gaze_point)
-        result["GazeOrigin"] = to_class(GazeOrigin, self.gaze_origin)
-        return result
-
 
 @dataclass
 class GazeData:
     left_eye: TEye
     right_eye: TEye
+    average_display_coordinate: PositionOnDisplayArea
     device_time_stamp: int
     system_time_stamp: int
 
@@ -174,22 +122,14 @@ class GazeData:
         assert isinstance(obj, dict)
         left_eye = TEye.from_dict(obj.get("LeftEye"))
         right_eye = TEye.from_dict(obj.get("RightEye"))
+        average_display_coordinate = PositionOnDisplayArea(
+            (left_eye.gaze_point.position_on_display_area.x + right_eye.gaze_point.position_on_display_area.x) / 2,
+            (left_eye.gaze_point.position_on_display_area.y + right_eye.gaze_point.position_on_display_area.y) / 2,
+        )
         device_time_stamp = from_int(obj.get("DeviceTimeStamp"))
         system_time_stamp = from_int(obj.get("SystemTimeStamp"))
-        return GazeData(left_eye, right_eye, device_time_stamp, system_time_stamp)
-
-    def to_dict(self) -> dict:
-        result: dict = {}
-        result["LeftEye"] = to_class(TEye, self.left_eye)
-        result["RightEye"] = to_class(TEye, self.right_eye)
-        result["DeviceTimeStamp"] = from_int(self.device_time_stamp)
-        result["SystemTimeStamp"] = from_int(self.system_time_stamp)
-        return result
+        return GazeData(left_eye, right_eye, average_display_coordinate, device_time_stamp, system_time_stamp)
 
 
 def gaze_data_from_dict(s: Any) -> List[GazeData]:
     return from_list(GazeData.from_dict, s)
-
-
-def gaze_data_to_dict(x: List[GazeData]) -> Any:
-    return from_list(lambda x: to_class(GazeData, x), x)
