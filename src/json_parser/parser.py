@@ -3,8 +3,8 @@ import os
 from typing import Any, AnyStr, IO
 
 
-def parse() -> Any:
-    file = open_file("Алексей63688521416324.json")
+def parse(filename: str) -> Any:
+    file = open_file(filename)
     return json.load(file)
 
 
