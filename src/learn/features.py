@@ -4,13 +4,14 @@ import numpy as np
 
 from classifiers.fixation import FixationsGroup
 from classifiers.saccade import SaccadesGroup
+from learn.vector import Vector
 
 
-def get_features_vector(fixations: FixationsGroup, saccades: SaccadesGroup) -> Tuple[int, float, float, float]:
-    return get_count_of_fixations(fixations), \
-           get_average_duration_of_fixations(fixations), \
-           get_average_horizontal_amplitude_of_saccades(saccades), \
-           get_average_velocity_of_saccades(saccades)
+def get_features_vector(fixations: FixationsGroup, saccades: SaccadesGroup) -> Vector:
+    return Vector(get_count_of_fixations(fixations),
+                  get_average_duration_of_fixations(fixations),
+                  get_average_horizontal_amplitude_of_saccades(saccades),
+                  get_average_velocity_of_saccades(saccades))
 
 
 def get_count_of_fixations(fixations: FixationsGroup) -> int:
