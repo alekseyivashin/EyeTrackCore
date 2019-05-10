@@ -13,5 +13,4 @@ class RandomForest:
         clf = RandomForestClassifier()
         clf.fit(train_array, labels)
 
-        Z = clf.predict(test_array).tolist()
-        return LearnUtils.prediction_to_result(Z)
+        return clf.predict(test_array).tolist()

@@ -1,16 +1,16 @@
 from typing import List
 
-from sklearn.svm import SVC
+from sklearn.naive_bayes import GaussianNB
 
 from learn.utils import LearnUtils
 
 
-class SVCMethod:
+class Bayes:
 
     def learn(self) -> List[int]:
         labels, train_array, test_array = LearnUtils.get_learn_data()
 
-        clf = SVC(kernel="poly")
+        clf = GaussianNB()
         clf.fit(train_array, labels)
 
         return clf.predict(test_array).tolist()

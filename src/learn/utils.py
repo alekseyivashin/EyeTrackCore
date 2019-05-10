@@ -30,6 +30,10 @@ class LearnUtils:
         return LearnUtils.__encoded_labels_for_train, LearnUtils.__train_array, LearnUtils.__test_array
 
     @staticmethod
+    def get_encoded_labels() -> Any:
+        return LearnUtils.__encoded_labels.tolist()
+
+    @staticmethod
     def get_labels_count() -> int:
         return LearnUtils.__labels_count
 
@@ -43,11 +47,10 @@ class LearnUtils:
         train_vectors = []
         test_vectors = []
         for name in vectors:
-            train_vectors.extend(vectors[name][1:])
-            test_vectors.extend(vectors[name][:1])
-            labels.extend([name] * (len(vectors[name]) - 1))
+            for i, vector in enumerate(vectors[name]):
+                if i == 3:
+                    test_vectors.append(vector)
+                else:
+                    train_vectors.append(vector)
+                    labels.append(name)
         return labels, LearnUtils.__vector_list_to_array(train_vectors), LearnUtils.__vector_list_to_array(test_vectors)
-
-    @staticmethod
-    def prediction_to_result(prediction: ndarray) -> List[int]:
-        return [1 if prediction[i] == LearnUtils.__encoded_labels[i] else 0 for i in range(LearnUtils.__labels_count)]

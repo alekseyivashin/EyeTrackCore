@@ -14,5 +14,4 @@ class KNN:
         clf = neighbors.KNeighborsClassifier(self.n_neighbors)
         clf.fit(train_array, labels)
 
-        Z = clf.predict(test_array).tolist()
-        return LearnUtils.prediction_to_result(Z)
+        return clf.predict(test_array).tolist()

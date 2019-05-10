@@ -8,15 +8,17 @@ from classifiers.saccade import SaccadesGroup
 from classifiers.utils import positions_to_numpy_array
 from classifiers.utils import time_to_numpy_array
 from json_parser.mapper import GazeData
+from learn.bayes import Bayes
 from learn.features import get_features_vector
-from learn.kmeans import KMeansMethod
+from learn.gaussian import Gaussian
 from learn.knn import KNN
 from learn.random_forest import RandomForest
 from learn.svcmethod import SVCMethod
 from learn.utils import LearnUtils
 from learn.vector import Vector
+from sklearn.metrics import accuracy_score
 
-
+import numpy as np
 
 DISPLAY_SIZE = 1920, 1080
 
@@ -25,6 +27,7 @@ def main():
     data = parser.parse_all()
     vectors = get_vectors_for_data(data)
     LearnUtils.set_up(vectors)
+    encoded_labels = LearnUtils.get_encoded_labels()
 
     #----------------------CLASSIFICATION----------------------#
     knn_result = KNN().learn()
@@ -33,13 +36,23 @@ def main():
 
     random_forest_result = RandomForest().learn()
 
-    # ----------------------CLUSTERING----------------------#
-    kmeans_result = KMeansMethod().learn()
+    gaussian_result = Gaussian().learn()
+
+    bayes_result = Bayes().learn()
+
+    major_result = get_major_result(encoded_labels, [knn_result, svc_result, random_forest_result, gaussian_result, bayes_result])
+
+    score = accuracy_score(encoded_labels, major_result)
+
     a = 1
     # plot_fixations = draw_fixations(fixations, display_size)
     # plot_scanpath = draw_scanpath(fixations, saccades, display_size)
     # plot_fixations.show()
     # plot_scanpath.show()
+
+def get_major_result(encoded_labels: List[int], result_arrays: List[List[int]]) -> List[int]:
+    reversed_results = np.array(result_arrays).transpose()
+    return [np.bincount(result).argmax() for result in reversed_results]
 
 
 def get_vectors_for_data(data: Dict[str, List[List[GazeData]]]) -> Dict[str, List[Vector]]:
