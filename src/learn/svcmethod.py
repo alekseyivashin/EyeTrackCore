@@ -1,17 +1,16 @@
 from typing import List
 
-from sklearn import neighbors
+from sklearn.svm import SVC
 
 from learn.utils import LearnUtils
 
 
-class KNN:
-    n_neighbors = 7
+class SVCMethod:
 
     def learn(self) -> List[int]:
         labels, train_array, test_array = LearnUtils.get_learn_data()
 
-        clf = neighbors.KNeighborsClassifier(self.n_neighbors)
+        clf = SVC(kernel="poly")
         clf.fit(train_array, labels)
 
         Z = clf.predict(test_array).tolist()
