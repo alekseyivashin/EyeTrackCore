@@ -26,23 +26,53 @@ DISPLAY_SIZE = 1920, 1080
 def main():
     data = parser.parse_all()
     vectors = get_vectors_for_data(data)
-    LearnUtils.set_up(vectors)
-    encoded_labels = LearnUtils.get_encoded_labels()
+    knn_scores = []
+    svc_scores = []
+    random_forest_scores = []
+    gaussian_scores = []
+    bayes_scores = []
+    major_scores = []
+    for i in range(6):
+        LearnUtils.set_up(vectors, test_index=i)
+        encoded_labels = LearnUtils.get_encoded_labels()
 
-    #----------------------CLASSIFICATION----------------------#
-    knn_result = KNN().learn()
+        knn_result = KNN().learn()
 
-    svc_result = SVCMethod().learn()
+        svc_result = SVCMethod().learn()
 
-    random_forest_result = RandomForest().learn()
+        random_forest_result = RandomForest().learn()
 
-    gaussian_result = Gaussian().learn()
+        gaussian_result = Gaussian().learn()
 
-    bayes_result = Bayes().learn()
+        bayes_result = Bayes().learn()
 
-    major_result = get_major_result(encoded_labels, [knn_result, svc_result, random_forest_result, gaussian_result, bayes_result])
+        major_result = get_major_result(encoded_labels,
+                                        [knn_result, svc_result, random_forest_result, gaussian_result, bayes_result])
 
-    score = accuracy_score(encoded_labels, major_result)
+        knn_scores.append(accuracy_score(encoded_labels, knn_result))
+        svc_scores.append(accuracy_score(encoded_labels, svc_result))
+        random_forest_scores.append(accuracy_score(encoded_labels, random_forest_result))
+        gaussian_scores.append(accuracy_score(encoded_labels, gaussian_result))
+        bayes_scores.append(accuracy_score(encoded_labels, bayes_result))
+        major_scores.append(accuracy_score(encoded_labels, major_result))
+
+    # LearnUtils.set_up(vectors, test_index=3)
+    # encoded_labels = LearnUtils.get_encoded_labels()
+    #
+    # #----------------------CLASSIFICATION----------------------#
+    # knn_result = KNN().learn()
+    #
+    # svc_result = SVCMethod().learn()
+    #
+    # random_forest_result = RandomForest().learn()
+    #
+    # gaussian_result = Gaussian().learn()
+    #
+    # bayes_result = Bayes().learn()
+    #
+    # major_result = get_major_result(encoded_labels, [knn_result, svc_result, random_forest_result, gaussian_result, bayes_result])
+    #
+    # score = accuracy_score(encoded_labels, major_result)
 
     a = 1
     # plot_fixations = draw_fixations(fixations, display_size)

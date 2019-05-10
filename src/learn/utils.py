@@ -14,13 +14,13 @@ class LearnUtils:
     __test_array: ndarray
 
     @staticmethod
-    def set_up(vectors: Dict[str, List[Vector]]):
+    def set_up(vectors: Dict[str, List[Vector]], test_index: int):
         labelsEncoder = LabelEncoder()
         labelsEncoder.fit(list(vectors.keys()))
         LearnUtils.__labels_count = len(vectors.keys())
         LearnUtils.__encoded_labels = labelsEncoder.transform(list(vectors.keys()))
 
-        labels_for_train, train_array, test_array = LearnUtils.__preprocess_data(vectors)
+        labels_for_train, train_array, test_array = LearnUtils.__preprocess_data(vectors, test_index)
         LearnUtils.__encoded_labels_for_train = labelsEncoder.transform(labels_for_train)
         LearnUtils.__train_array = scale(train_array)
         LearnUtils.__test_array = scale(test_array)
@@ -42,13 +42,13 @@ class LearnUtils:
         return array([vector.to_array() for vector in vectors])
 
     @staticmethod
-    def __preprocess_data(vectors: Dict[str, List[Vector]]) -> Tuple[Any, ndarray, ndarray]:
+    def __preprocess_data(vectors: Dict[str, List[Vector]], test_index: int) -> Tuple[Any, ndarray, ndarray]:
         labels = []
         train_vectors = []
         test_vectors = []
         for name in vectors:
             for i, vector in enumerate(vectors[name]):
-                if i == 3:
+                if i == test_index:
                     test_vectors.append(vector)
                 else:
                     train_vectors.append(vector)
