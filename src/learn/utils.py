@@ -16,14 +16,14 @@ class LearnUtils:
     __test_array: ndarray
 
     @staticmethod
-    def set_up(vectors: Dict[str, List[Vector]], test_index: int):
+    def set_up(vectors: Dict[str, List[Vector]], test_indexes: List[int]):
         LearnUtils.__labels_encoder = LabelEncoder()
         LearnUtils.__labels = list(vectors.keys())
         LearnUtils.__labels_encoder.fit(LearnUtils.__labels)
         LearnUtils.__labels_count = len(LearnUtils.__labels)
         LearnUtils.__encoded_labels = LearnUtils.__labels_encoder.transform(list(vectors.keys()))
 
-        labels_for_train, train_array, test_array = LearnUtils.__preprocess_data(vectors, test_index)
+        labels_for_train, train_array, test_array = LearnUtils.__preprocess_data(vectors, test_indexes)
         LearnUtils.__encoded_labels_for_train = LearnUtils.__labels_encoder.transform(labels_for_train)
         LearnUtils.__train_array = scale(train_array)
         LearnUtils.__test_array = scale(test_array)
@@ -49,13 +49,13 @@ class LearnUtils:
         return array([vector.to_array() for vector in vectors])
 
     @staticmethod
-    def __preprocess_data(vectors: Dict[str, List[Vector]], test_index: int) -> Tuple[Any, ndarray, ndarray]:
+    def __preprocess_data(vectors: Dict[str, List[Vector]], test_indexes: List[int]) -> Tuple[Any, ndarray, ndarray]:
         labels = []
         train_vectors = []
         test_vectors = []
         for name in vectors:
             for i, vector in enumerate(vectors[name]):
-                if i == test_index:
+                if i in test_indexes:
                     test_vectors.append(vector)
                 else:
                     train_vectors.append(vector)
