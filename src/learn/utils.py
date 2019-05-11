@@ -7,6 +7,8 @@ from learn.vector import Vector
 
 
 class LearnUtils:
+    __labels_encoder: LabelEncoder
+    __labels: List[str]
     __labels_count: int
     __encoded_labels: Any
     __encoded_labels_for_train: Any
@@ -15,13 +17,14 @@ class LearnUtils:
 
     @staticmethod
     def set_up(vectors: Dict[str, List[Vector]], test_index: int):
-        labelsEncoder = LabelEncoder()
-        labelsEncoder.fit(list(vectors.keys()))
-        LearnUtils.__labels_count = len(vectors.keys())
-        LearnUtils.__encoded_labels = labelsEncoder.transform(list(vectors.keys()))
+        LearnUtils.__labels_encoder = LabelEncoder()
+        LearnUtils.__labels = list(vectors.keys())
+        LearnUtils.__labels_encoder.fit(LearnUtils.__labels)
+        LearnUtils.__labels_count = len(LearnUtils.__labels)
+        LearnUtils.__encoded_labels = LearnUtils.__labels_encoder.transform(list(vectors.keys()))
 
         labels_for_train, train_array, test_array = LearnUtils.__preprocess_data(vectors, test_index)
-        LearnUtils.__encoded_labels_for_train = labelsEncoder.transform(labels_for_train)
+        LearnUtils.__encoded_labels_for_train = LearnUtils.__labels_encoder.transform(labels_for_train)
         LearnUtils.__train_array = scale(train_array)
         LearnUtils.__test_array = scale(test_array)
 
@@ -30,8 +33,12 @@ class LearnUtils:
         return LearnUtils.__encoded_labels_for_train, LearnUtils.__train_array, LearnUtils.__test_array
 
     @staticmethod
-    def get_encoded_labels() -> Any:
+    def get_encoded_labels() -> List[int]:
         return LearnUtils.__encoded_labels.tolist()
+
+    @staticmethod
+    def decode_labels(encoded_labels: List[int]) -> List[str]:
+        return LearnUtils.__labels_encoder.inverse_transform(encoded_labels)
 
     @staticmethod
     def get_labels_count() -> int:
