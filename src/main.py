@@ -2,6 +2,7 @@ from typing import List, Dict
 
 import json_parser.parser as parser
 import numpy as np
+import matplotlib.pyplot as plt
 from classifiers.detectors import fixation_detection
 from classifiers.detectors import saccade_detection
 from classifiers.fixation import FixationsGroup
@@ -58,10 +59,10 @@ def main():
     #     bayes_scores.append(accuracy_score(encoded_labels, bayes_result))
     #     major_scores.append(accuracy_score(encoded_labels, major_result))
 
-    LearnUtils.set_up(vectors, test_index=3)
-    encoded_labels = LearnUtils.get_encoded_labels()
-    voting_result = Voting().learn()
-    score = accuracy_score(encoded_labels, voting_result)
+    # LearnUtils.set_up(vectors, test_index=3)
+    # encoded_labels = LearnUtils.get_encoded_labels()
+    # voting_result = Voting().learn()
+    # score = accuracy_score(encoded_labels, voting_result)
 
     #----------------------CLASSIFICATION----------------------#
     # knn_result = KNN().learn()
@@ -102,6 +103,10 @@ def processing_data(gaze_data_list: List[GazeData]) -> Vector:
     x_array, y_array = positions_to_numpy_array(list(map(lambda data: data.average_display_coordinate, gaze_data_list)),
                                                 DISPLAY_SIZE)
     time_array = time_to_numpy_array(list(map(lambda data: data.system_time_stamp, gaze_data_list)))
+    plt.plot(time_array[150:250], x_array[150:250])
+    plt.xlabel("Время")
+    plt.ylabel("Координата Х")
+    plt.show()
     fixations = FixationsGroup.get(fixation_detection(x_array, y_array, time_array))
     saccades = SaccadesGroup.get(saccade_detection(x_array, y_array, time_array))
     return get_features_vector(fixations, saccades)
