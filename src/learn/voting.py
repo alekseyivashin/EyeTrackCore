@@ -23,7 +23,7 @@ class Voting:
 
         clf = VotingClassifier(
             estimators=[("knn", knn), ("svc", svc), ("rf", random_forest), ("gaus", gaussian), ("bayes", bayes)],
-            voting="soft", flatten_transform=True)
+            voting="soft")
         clf.fit(train_array, labels)
 
         return clf.predict(test_array).tolist()

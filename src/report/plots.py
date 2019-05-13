@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from sklearn.metrics import confusion_matrix
+from sklearn.calibration import CalibratedClassifierCV, calibration_curve
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, brier_score_loss, precision_score, recall_score, f1_score
 from sklearn.utils.multiclass import unique_labels
 
 from learn.utils import LearnUtils
@@ -30,7 +32,7 @@ def plot_confusion_matrix(y_true, y_pred,
     else:
         print('Confusion matrix, without normalization')
 
-    print(cm)
+    # print(cm)
 
     fig, ax = plt.subplots()
     im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
@@ -42,7 +44,7 @@ def plot_confusion_matrix(y_true, y_pred,
            xticklabels=classes, yticklabels=classes,
            title=title,
            ylabel='Тестовые классы',
-           xlabel='Предсказанные классы')
+           xlabel='Оценочные классы')
 
     # Rotate the tick labels and set their alignment.
     plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
