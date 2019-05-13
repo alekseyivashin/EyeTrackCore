@@ -14,3 +14,6 @@ class Gaussian:
         clf.fit(train_array, labels)
 
         return clf.predict(test_array).tolist()
+
+    def get_classifier(self):
+        return GaussianProcessClassifier()

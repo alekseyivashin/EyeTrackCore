@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from sklearn.metrics import confusion_matrix
+from sklearn.calibration import CalibratedClassifierCV, calibration_curve
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, brier_score_loss, precision_score, recall_score, f1_score
 from sklearn.utils.multiclass import unique_labels
 
 from learn.utils import LearnUtils

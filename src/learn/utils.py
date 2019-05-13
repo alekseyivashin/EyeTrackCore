@@ -33,6 +33,10 @@ class LearnUtils:
         return LearnUtils.__encoded_labels_for_train, LearnUtils.__train_array, LearnUtils.__test_array
 
     @staticmethod
+    def get_labels() -> List[str]:
+        return LearnUtils.__labels
+
+    @staticmethod
     def get_encoded_labels() -> List[int]:
         return LearnUtils.__encoded_labels.tolist()
 

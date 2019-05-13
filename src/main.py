@@ -1,7 +1,9 @@
 from typing import List, Dict
 
-import json_parser.parser as parser
 import numpy as np
+from sklearn.metrics import accuracy_score
+
+import json_parser.parser as parser
 from classifiers.detectors import fixation_detection
 from classifiers.detectors import saccade_detection
 from classifiers.fixation import FixationsGroup
@@ -15,12 +17,10 @@ from learn.gaussian import Gaussian
 from learn.knn import KNN
 from learn.random_forest import RandomForest
 from learn.svcmethod import SVCMethod
-from learn.vector import Vector
-from sklearn.metrics import accuracy_score
-
 from learn.utils import LearnUtils
+from learn.vector import Vector
 from learn.voting import Voting
-from report.plots import plot_confusion_matrix
+from report.reports import print_classification_report
 
 DISPLAY_SIZE = 1920, 1080
 
@@ -28,62 +28,39 @@ DISPLAY_SIZE = 1920, 1080
 def main():
     data = parser.parse_all()
     vectors = get_vectors_for_data(data)
-    # knn_scores = []
-    # svc_scores = []
-    # random_forest_scores = []
-    # gaussian_scores = []
-    # bayes_scores = []
-    # major_scores = []
-    # for i in range(6):
-    #     LearnUtils.set_up(vectors, test_index=i)
-    #     encoded_labels = LearnUtils.get_encoded_labels()
-    #
-    #     knn_result = KNN().learn()
-    #
-    #     svc_result = SVCMethod().learn()
-    #
-    #     random_forest_result = RandomForest().learn()
-    #
-    #     gaussian_result = Gaussian().learn()
-    #
-    #     bayes_result = Bayes().learn()
-    #
-    #     major_result = get_major_result(encoded_labels,
-    #                                     [knn_result, svc_result, random_forest_result, gaussian_result, bayes_result])
-    #
-    #     knn_scores.append(accuracy_score(encoded_labels, knn_result))
-    #     svc_scores.append(accuracy_score(encoded_labels, svc_result))
-    #     random_forest_scores.append(accuracy_score(encoded_labels, random_forest_result))
-    #     gaussian_scores.append(accuracy_score(encoded_labels, gaussian_result))
-    #     bayes_scores.append(accuracy_score(encoded_labels, bayes_result))
-    #     major_scores.append(accuracy_score(encoded_labels, major_result))
 
-    LearnUtils.set_up(vectors, test_indexes=[4])
-    encoded_labels = np.repeat(LearnUtils.get_encoded_labels(), 1)
+    LearnUtils.set_up(vectors, test_indexes=[3, 4])
+    encoded_labels = np.repeat(LearnUtils.get_encoded_labels(), 2)
     voting_result = Voting().learn()
     voting_score = accuracy_score(encoded_labels, voting_result)
 
     # ----------------------CLASSIFICATION----------------------#
-    knn_result = KNN().learn()
-    knn_score = accuracy_score(encoded_labels, knn_result)
+    # knn = KNN()
+    # knn_result = knn.learn()
+    # knn_score = accuracy_score(encoded_labels, knn_result)
+    #
+    # svc = SVCMethod()
+    # svc_result = svc.learn()
+    # svc_score = accuracy_score(encoded_labels, svc_result)
+    #
+    # random_forest = RandomForest()
+    # random_forest_result = random_forest.learn()
+    # random_forest_score = accuracy_score(encoded_labels, random_forest_result)
+    #
+    # gaussian = Gaussian()
+    # gaussian_result = gaussian.learn()
+    # gaussian_score = accuracy_score(encoded_labels, gaussian_result)
+    #
+    # bayes = Bayes()
+    # bayes_result = bayes.learn()
+    # bayes_score = accuracy_score(encoded_labels, bayes_result)
 
-    svc_result = SVCMethod().learn()
-    svc_score = accuracy_score(encoded_labels, svc_result)
+    print_classification_report(encoded_labels, voting_result, LearnUtils.get_labels())
 
-    random_forest_result = RandomForest().learn()
-    random_forest_score = accuracy_score(encoded_labels, random_forest_result)
-
-    gaussian_result = Gaussian().learn()
-    gaussian_score = accuracy_score(encoded_labels, gaussian_result)
-
-    bayes_result = Bayes().learn()
-    bayes_score = accuracy_score(encoded_labels, bayes_result)
-
-    # print_classification_report(encoded_labels, major_result, LearnUtils.get_labels())
-
-    fig = plot_confusion_matrix(encoded_labels, voting_result, normalize=True,
-                                title=f'Матрица смещения для обобщенных методов без применения весов\nТочность оценки: {voting_score:.2f}')
-    fig.show()
+    # ----------------------CONFUSION MATRIX----------------------#
+    # fig = plot_confusion_matrix(encoded_labels, voting_result, normalize=True,
+    #                             title=f'Матрица смещения для обобщенных методов без применения весов\nТочность оценки: {voting_score:.2f}')
+    # fig.show()
     # fig1 = plot_confusion_matrix(encoded_labels, knn_result, normalize=True,
     #                              title=f'Матрица смещения для метода "K ближайших соседей"\nТочность оценки: {knn_score:.2f}')
     # fig2 = plot_confusion_matrix(encoded_labels, svc_result, normalize=True,
