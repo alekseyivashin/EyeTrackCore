@@ -20,19 +20,24 @@ from learn.svcmethod import SVCMethod
 from learn.utils import LearnUtils
 from learn.vector import Vector
 from learn.voting import Voting
+from report.plots import plot_confusion_matrix
 from report.reports import print_classification_report
 
 DISPLAY_SIZE = 1920, 1080
 
 
 def main():
+    print("Process started")
     data = parser.parse_all()
+    print("Reading and parsing completed")
     vectors = get_vectors_for_data(data)
-
+    print("Vectors created")
     LearnUtils.set_up(vectors, test_indexes=[3, 4])
+    print("Utils setup completed")
     encoded_labels = np.repeat(LearnUtils.get_encoded_labels(), 2)
-    voting_result = Voting().learn()
-    voting_score = accuracy_score(encoded_labels, voting_result)
+    # voting_result = Voting().learn()
+    # print("Voting classifier learned")
+    # voting_score = accuracy_score(encoded_labels, voting_result)
 
     # ----------------------CLASSIFICATION----------------------#
     # knn = KNN()
@@ -55,11 +60,12 @@ def main():
     # bayes_result = bayes.learn()
     # bayes_score = accuracy_score(encoded_labels, bayes_result)
 
-    print_classification_report(encoded_labels, voting_result, LearnUtils.get_labels())
-
-    # ----------------------CONFUSION MATRIX----------------------#
+    # print_classification_report(encoded_labels, voting_result, LearnUtils.get_labels())
+    # print(voting_score)
+    #
+    # # ----------------------CONFUSION MATRIX----------------------#
     # fig = plot_confusion_matrix(encoded_labels, voting_result, normalize=True,
-    #                             title=f'Матрица смещения для обобщенных методов без применения весов\nТочность оценки: {voting_score:.2f}')
+    #                             title=f'Матрица смещения для обобщенных методов\nТочность оценки: {voting_score:.2f}')
     # fig.show()
     # fig1 = plot_confusion_matrix(encoded_labels, knn_result, normalize=True,
     #                              title=f'Матрица смещения для метода "K ближайших соседей"\nТочность оценки: {knn_score:.2f}')

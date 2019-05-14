@@ -114,6 +114,7 @@ class GazeData:
     left_eye: TEye
     right_eye: TEye
     average_display_coordinate: PositionOnDisplayArea
+    average_user_coordinate: PositionInCoordinates
     device_time_stamp: int
     system_time_stamp: int
 
@@ -126,9 +127,18 @@ class GazeData:
             (left_eye.gaze_point.position_on_display_area.x + right_eye.gaze_point.position_on_display_area.x) / 2,
             (left_eye.gaze_point.position_on_display_area.y + right_eye.gaze_point.position_on_display_area.y) / 2,
         )
+        average_user_coordinate = PositionInCoordinates(
+            (
+                        left_eye.gaze_origin.position_in_user_coordinates.x + right_eye.gaze_origin.position_in_user_coordinates.x) / 2,
+            (
+                        left_eye.gaze_origin.position_in_user_coordinates.y + right_eye.gaze_origin.position_in_user_coordinates.y) / 2,
+            (
+                        left_eye.gaze_origin.position_in_user_coordinates.z + right_eye.gaze_origin.position_in_user_coordinates.z) / 2
+        )
         device_time_stamp = from_int(obj.get("DeviceTimeStamp"))
         system_time_stamp = from_int(obj.get("SystemTimeStamp"))
-        return GazeData(left_eye, right_eye, average_display_coordinate, device_time_stamp, system_time_stamp)
+        return GazeData(left_eye, right_eye, average_display_coordinate, average_user_coordinate, device_time_stamp,
+                        system_time_stamp)
 
 
 def gaze_data_from_dict(s: Any) -> List[GazeData]:
