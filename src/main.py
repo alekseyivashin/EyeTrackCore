@@ -8,6 +8,7 @@ from classifiers.detectors import fixation_detection
 from classifiers.detectors import saccade_detection
 from classifiers.fixation import FixationsGroup
 from classifiers.saccade import SaccadesGroup
+from classifiers.user import UserPositionGroup
 from classifiers.utils import positions_to_numpy_array
 from classifiers.utils import time_to_numpy_array
 from json_parser.mapper import GazeData
@@ -35,9 +36,9 @@ def main():
     LearnUtils.set_up(vectors, test_indexes=[3, 4])
     print("Utils setup completed")
     encoded_labels = np.repeat(LearnUtils.get_encoded_labels(), 2)
-    # voting_result = Voting().learn()
-    # print("Voting classifier learned")
-    # voting_score = accuracy_score(encoded_labels, voting_result)
+    voting_result = Voting().learn()
+    print("Voting classifier learned")
+    voting_score = accuracy_score(encoded_labels, voting_result)
 
     # ----------------------CLASSIFICATION----------------------#
     # knn = KNN()
@@ -60,13 +61,13 @@ def main():
     # bayes_result = bayes.learn()
     # bayes_score = accuracy_score(encoded_labels, bayes_result)
 
-    # print_classification_report(encoded_labels, voting_result, LearnUtils.get_labels())
-    # print(voting_score)
+    print_classification_report(encoded_labels, voting_result, LearnUtils.get_labels())
+    print(voting_score)
     #
     # # ----------------------CONFUSION MATRIX----------------------#
-    # fig = plot_confusion_matrix(encoded_labels, voting_result, normalize=True,
-    #                             title=f'Матрица смещения для обобщенных методов\nТочность оценки: {voting_score:.2f}')
-    # fig.show()
+    fig = plot_confusion_matrix(encoded_labels, voting_result, normalize=True,
+                                title=f'Матрица смещения для обобщенных методов\nТочность оценки: {voting_score:.2f}')
+    fig.show()
     # fig1 = plot_confusion_matrix(encoded_labels, knn_result, normalize=True,
     #                              title=f'Матрица смещения для метода "K ближайших соседей"\nТочность оценки: {knn_score:.2f}')
     # fig2 = plot_confusion_matrix(encoded_labels, svc_result, normalize=True,
@@ -100,7 +101,8 @@ def processing_data(gaze_data_list: List[GazeData]) -> Vector:
     time_array = time_to_numpy_array(list(map(lambda data: data.system_time_stamp, gaze_data_list)))
     fixations = FixationsGroup.get(fixation_detection(x_array, y_array, time_array))
     saccades = SaccadesGroup.get(saccade_detection(x_array, y_array, time_array))
-    return get_features_vector(fixations, saccades)
+    user_positions = UserPositionGroup.get(list(map(lambda data: data.average_user_coordinate, gaze_data_list)), time_array)
+    return get_features_vector(fixations, saccades, user_positions)
 
 
 if __name__ == '__main__':
