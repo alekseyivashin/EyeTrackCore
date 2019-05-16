@@ -33,20 +33,20 @@ def main():
     print("Reading and parsing completed")
     vectors = get_vectors_for_data(data)
     print("Vectors created")
-    LearnUtils.set_up(vectors, test_indexes=[3, 4])
+    LearnUtils.set_up(vectors, test_indexes=[1, 4])
     print("Utils setup completed")
     encoded_labels = np.repeat(LearnUtils.get_encoded_labels(), 2)
     voting = Voting()
     # ----------------------VOTING LEARN----------------------#
-    # voting_result = voting.learn()
-    # print("Voting classifier learned")
-    # voting_score = accuracy_score(encoded_labels, voting_result)
-    # print_classification_report(encoded_labels, voting_result, LearnUtils.get_labels())
-    # print(voting_score)
+    voting_result = voting.learn()
+    print("Voting classifier learned")
+    voting_score = accuracy_score(encoded_labels, voting_result)
+    print_classification_report(encoded_labels, voting_result, LearnUtils.get_labels())
+    print(voting_score)
 
     # ----------------------VOTING CROSS VALIDATION-----------#
-    cross_val_result = voting.cross_validation()
-    a = 1
+    # cross_val_result = voting.cross_validation()
+    # a = 1
 
     # ----------------------CLASSIFICATION--------------------#
     # knn = KNN()
