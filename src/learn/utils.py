@@ -1,7 +1,7 @@
 from typing import List, Dict, Tuple, Any
 
 from numpy import ndarray, array
-from sklearn.preprocessing import scale, LabelEncoder
+from sklearn.preprocessing import LabelEncoder
 
 from learn.vector import Vector
 
@@ -27,8 +27,8 @@ class LearnUtils:
 
         labels_for_train, train_array, test_array = LearnUtils.__preprocess_data(LearnUtils.__vectors, test_indexes)
         LearnUtils.__encoded_labels_for_train = LearnUtils.__labels_encoder.transform(labels_for_train)
-        LearnUtils.__train_array = scale(train_array)
-        LearnUtils.__test_array = scale(test_array)
+        LearnUtils.__train_array = train_array
+        LearnUtils.__test_array = test_array
 
     @staticmethod
     def get_learn_data() -> Tuple[Any, ndarray, ndarray]:
@@ -37,7 +37,7 @@ class LearnUtils:
     @staticmethod
     def get_cross_val_data() -> Tuple[Any, ndarray]:
         labels, train_array, test_array = LearnUtils.__preprocess_data(LearnUtils.__vectors)
-        return labels, scale(train_array)
+        return labels, train_array
 
     @staticmethod
     def get_labels() -> List[str]:
