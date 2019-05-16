@@ -1,3 +1,9 @@
+import warnings
+
+from learn.decision_tree import DecisionTree
+
+warnings.filterwarnings("ignore", category=FutureWarning)
+
 from typing import List, Dict
 
 import numpy as np
@@ -38,11 +44,23 @@ def main():
     encoded_labels = np.repeat(LearnUtils.get_encoded_labels(), 2)
     voting = Voting()
     # ----------------------VOTING LEARN----------------------#
-    voting_result = voting.learn()
-    print("Voting classifier learned")
-    voting_score = accuracy_score(encoded_labels, voting_result)
-    print_classification_report(encoded_labels, voting_result, LearnUtils.get_labels())
-    print(voting_score)
+    score = []
+    for i in range(100):
+        print(f"Learn number: {i + 1}")
+        voting_result = voting.learn()
+        voting_score = accuracy_score(encoded_labels, voting_result)
+        # print_classification_report(encoded_labels, voting_result, LearnUtils.get_labels())
+        score.append(voting_score)
+    print(np.average(score))
+
+    # ----------------------VOTING FEATURE SELECTION----------#
+    # scores = {}
+    # scores["without"] = accuracy_score(encoded_labels, voting.learn())
+    # for feature_method_name in voting.get_feature_method_names():
+    #     print(f"Start {feature_method_name}")
+    #     voting_result = voting.learn(feature_method_name)
+    #     scores[feature_method_name] = accuracy_score(encoded_labels, voting_result)
+    # a = 1
 
     # ----------------------VOTING CROSS VALIDATION-----------#
     # cross_val_result = voting.cross_validation()
@@ -65,9 +83,14 @@ def main():
     # gaussian_result = gaussian.learn()
     # gaussian_score = accuracy_score(encoded_labels, gaussian_result)
     #
+    # decision_tree = DecisionTree()
+    # decision_tree_result = decision_tree.learn()
+    # decision_tree_score = accuracy_score(encoded_labels, decision_tree_result)
+    #
     # bayes = Bayes()
     # bayes_result = bayes.learn()
     # bayes_score = accuracy_score(encoded_labels, bayes_result)
+    a = 1
 
     #
     # # ----------------------CONFUSION MATRIX----------------------#
@@ -107,7 +130,8 @@ def processing_data(gaze_data_list: List[GazeData]) -> Vector:
     time_array = time_to_numpy_array(list(map(lambda data: data.system_time_stamp, gaze_data_list)))
     fixations = FixationsGroup.get(fixation_detection(x_array, y_array, time_array))
     saccades = SaccadesGroup.get(saccade_detection(x_array, y_array, time_array))
-    user_positions = UserPositionGroup.get(list(map(lambda data: data.average_user_coordinate, gaze_data_list)), time_array)
+    user_positions = UserPositionGroup.get(list(map(lambda data: data.average_user_coordinate, gaze_data_list)),
+                                           time_array)
     return get_features_vector(fixations, saccades, user_positions)
 
 
