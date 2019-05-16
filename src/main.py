@@ -36,11 +36,19 @@ def main():
     LearnUtils.set_up(vectors, test_indexes=[3, 4])
     print("Utils setup completed")
     encoded_labels = np.repeat(LearnUtils.get_encoded_labels(), 2)
-    voting_result = Voting().learn()
-    print("Voting classifier learned")
-    voting_score = accuracy_score(encoded_labels, voting_result)
+    voting = Voting()
+    # ----------------------VOTING LEARN----------------------#
+    # voting_result = voting.learn()
+    # print("Voting classifier learned")
+    # voting_score = accuracy_score(encoded_labels, voting_result)
+    # print_classification_report(encoded_labels, voting_result, LearnUtils.get_labels())
+    # print(voting_score)
 
-    # ----------------------CLASSIFICATION----------------------#
+    # ----------------------VOTING CROSS VALIDATION-----------#
+    cross_val_result = voting.cross_validation()
+    a = 1
+
+    # ----------------------CLASSIFICATION--------------------#
     # knn = KNN()
     # knn_result = knn.learn()
     # knn_score = accuracy_score(encoded_labels, knn_result)
@@ -61,13 +69,11 @@ def main():
     # bayes_result = bayes.learn()
     # bayes_score = accuracy_score(encoded_labels, bayes_result)
 
-    print_classification_report(encoded_labels, voting_result, LearnUtils.get_labels())
-    print(voting_score)
     #
     # # ----------------------CONFUSION MATRIX----------------------#
-    fig = plot_confusion_matrix(encoded_labels, voting_result, normalize=True,
-                                title=f'Матрица смещения для обобщенных методов\nТочность оценки: {voting_score:.2f}')
-    fig.show()
+    # fig = plot_confusion_matrix(encoded_labels, voting_result, normalize=True,
+    #                             title=f'Матрица смещения для обобщенных методов\nТочность оценки: {voting_score:.2f}')
+    # fig.show()
     # fig1 = plot_confusion_matrix(encoded_labels, knn_result, normalize=True,
     #                              title=f'Матрица смещения для метода "K ближайших соседей"\nТочность оценки: {knn_score:.2f}')
     # fig2 = plot_confusion_matrix(encoded_labels, svc_result, normalize=True,
