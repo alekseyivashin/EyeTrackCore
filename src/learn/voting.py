@@ -6,14 +6,14 @@ from sklearn.gaussian_process import GaussianProcessClassifier
 from sklearn.model_selection import cross_val_score
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.svm import SVC
+from sklearn.svm import LinearSVC, SVC
 from sklearn.tree import DecisionTreeClassifier
 
 from learn.utils import LearnUtils
 
 
 class Voting:
-    __n_neighbors = 7
+    __n_neighbors = 5
     __feature_methods = {
         "k_chi_3": SelectKBest(chi2, k=3),
         "k_chi_4": SelectKBest(chi2, k=4),
@@ -65,7 +65,7 @@ class Voting:
 
     def __create_classifier(self):
         knn = KNeighborsClassifier(self.__n_neighbors)
-        svc = SVC(kernel="poly", probability=True)
+        svc = SVC(kernel="linear", probability=True)
         random_forest = RandomForestClassifier()
         gaussian = GaussianProcessClassifier()
         decision_tree = DecisionTreeClassifier()

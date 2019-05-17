@@ -42,16 +42,22 @@ def main():
     LearnUtils.set_up(vectors, test_indexes=[1, 4])
     print("Utils setup completed")
     encoded_labels = np.repeat(LearnUtils.get_encoded_labels(), 2)
+    knn = KNN()
+    svc = SVCMethod()
+    random_forest = RandomForest()
+    gaussian = Gaussian()
+    decision_tree = DecisionTree()
+    bayes = Bayes()
     voting = Voting()
     # ----------------------VOTING LEARN----------------------#
-    score = []
-    for i in range(100):
-        print(f"Learn number: {i + 1}")
-        voting_result = voting.learn()
-        voting_score = accuracy_score(encoded_labels, voting_result)
-        # print_classification_report(encoded_labels, voting_result, LearnUtils.get_labels())
-        score.append(voting_score)
-    print(np.average(score))
+    # score = []
+    # for i in range(100):
+    #     print(f"Learn number: {i + 1}")
+    #     voting_result = voting.learn()
+    #     voting_score = accuracy_score(encoded_labels, voting_result)
+    #     # print_classification_report(encoded_labels, voting_result, LearnUtils.get_labels())
+    #     score.append(voting_score)
+    # print(np.average(score))
 
     # ----------------------VOTING FEATURE SELECTION----------#
     # scores = {}
@@ -66,28 +72,29 @@ def main():
     # cross_val_result = voting.cross_validation()
     # a = 1
 
+    # ----------------------GRID------------------------------#
+    # knn_grid_result = knn.grid()
+    # svc_grid_result = svc.grid()
+    # random_forest_grid_result = random_forest.grid()
+    gaussian_grid_result = gaussian.grid()
+    a = 1
+
     # ----------------------CLASSIFICATION--------------------#
-    # knn = KNN()
     # knn_result = knn.learn()
     # knn_score = accuracy_score(encoded_labels, knn_result)
     #
-    # svc = SVCMethod()
     # svc_result = svc.learn()
     # svc_score = accuracy_score(encoded_labels, svc_result)
     #
-    # random_forest = RandomForest()
     # random_forest_result = random_forest.learn()
     # random_forest_score = accuracy_score(encoded_labels, random_forest_result)
     #
-    # gaussian = Gaussian()
     # gaussian_result = gaussian.learn()
     # gaussian_score = accuracy_score(encoded_labels, gaussian_result)
     #
-    # decision_tree = DecisionTree()
     # decision_tree_result = decision_tree.learn()
     # decision_tree_score = accuracy_score(encoded_labels, decision_tree_result)
     #
-    # bayes = Bayes()
     # bayes_result = bayes.learn()
     # bayes_score = accuracy_score(encoded_labels, bayes_result)
     a = 1
