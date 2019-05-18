@@ -1,14 +1,15 @@
 from typing import List
 
-from sklearn.ensemble import RandomForestClassifier, VotingClassifier
+from sklearn.ensemble import VotingClassifier
 from sklearn.feature_selection import SelectKBest, chi2, f_classif, mutual_info_classif, SelectFpr, SelectFdr, SelectFwe
-from sklearn.gaussian_process import GaussianProcessClassifier
 from sklearn.model_selection import cross_val_score
-from sklearn.naive_bayes import GaussianNB
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.svm import LinearSVC, SVC
-from sklearn.tree import DecisionTreeClassifier
 
+from learn.bayes import Bayes
+from learn.decision_tree import DecisionTree
+from learn.gaussian import Gaussian
+from learn.knn import KNN
+from learn.random_forest import RandomForest
+from learn.svcmethod import SVCMethod
 from learn.utils import LearnUtils
 
 
@@ -64,19 +65,20 @@ class Voting:
         return cross_val_score(clf, train_array, labels, cv=6)
 
     def __create_classifier(self):
-        knn = KNeighborsClassifier(self.__n_neighbors)
-        svc = SVC(kernel="linear", probability=True)
-        random_forest = RandomForestClassifier()
-        gaussian = GaussianProcessClassifier()
-        decision_tree = DecisionTreeClassifier()
-        bayes = GaussianNB()
+        knn = KNN().get_classifier()
+        svc = SVCMethod().get_classifier()
+        random_forest = RandomForest().get_classifier()
+        gaussian = Gaussian().get_classifier()
+        decision_tree = DecisionTree().get_classifier()
+        bayes = Bayes().get_classifier()
 
         return VotingClassifier(
             estimators=[
-                ("knn", knn),
+                # ("knn", knn),
                 ("svc", svc),
-                ("rf", random_forest),
+                # ("rf", random_forest),
                 ("gaus", gaussian),
-                ("dt", decision_tree),
-                ("bayes", bayes)],
+                # ("dt", decision_tree),
+                # ("bayes", bayes)
+            ],
             voting="soft")

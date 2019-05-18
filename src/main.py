@@ -42,6 +42,7 @@ def main():
     LearnUtils.set_up(vectors, test_indexes=[1, 4])
     print("Utils setup completed")
     encoded_labels = np.repeat(LearnUtils.get_encoded_labels(), 2)
+    times = 100
     knn = KNN()
     svc = SVCMethod()
     random_forest = RandomForest()
@@ -50,14 +51,8 @@ def main():
     bayes = Bayes()
     voting = Voting()
     # ----------------------VOTING LEARN----------------------#
-    # score = []
-    # for i in range(100):
-    #     print(f"Learn number: {i + 1}")
-    #     voting_result = voting.learn()
-    #     voting_score = accuracy_score(encoded_labels, voting_result)
-    #     # print_classification_report(encoded_labels, voting_result, LearnUtils.get_labels())
-    #     score.append(voting_score)
-    # print(np.average(score))
+    # voting_result = run_multiple_times(voting, encoded_labels, times)
+    # a = 1
 
     # ----------------------VOTING FEATURE SELECTION----------#
     # scores = {}
@@ -76,8 +71,9 @@ def main():
     # knn_grid_result = knn.grid()
     # svc_grid_result = svc.grid()
     # random_forest_grid_result = random_forest.grid()
-    gaussian_grid_result = gaussian.grid()
-    a = 1
+    # gaussian_grid_result = gaussian.grid()
+    # decision_tree_grid_result = decision_tree.grid()
+    # a = 1
 
     # ----------------------CLASSIFICATION--------------------#
     # knn_result = knn.learn()
@@ -97,6 +93,15 @@ def main():
     #
     # bayes_result = bayes.learn()
     # bayes_score = accuracy_score(encoded_labels, bayes_result)
+    # a = 1
+
+    # ----------------------CLASSIFICATION MULTIPLE TIMES-----#
+    # knn_score = run_multiple_times(knn, encoded_labels, times)
+    svc_score = run_multiple_times(svc, encoded_labels, times)
+    # random_forest_score = run_multiple_times(random_forest, encoded_labels, times)
+    # gaussian_score = run_multiple_times(gaussian, encoded_labels, times)
+    # decision_tree_score = run_multiple_times(decision_tree, encoded_labels, times)
+    # bayes_score = run_multiple_times(bayes, encoded_labels, times)
     a = 1
 
     #
@@ -125,6 +130,16 @@ def main():
     # plot_scanpath = draw_scanpath(fixations, saccades, display_size)
     # plot_fixations.show()
     # plot_scanpath.show()
+
+def run_multiple_times(method, encoded_labels, times):
+    score = []
+    for i in range(times):
+        print(f"Learn {method.__class__.__name__} number: {i + 1}")
+        voting_result = method.learn()
+        voting_score = accuracy_score(encoded_labels, voting_result)
+        # print_classification_report(encoded_labels, voting_result, LearnUtils.get_labels())
+        score.append(voting_score)
+    return np.mean(score), np.std(score)
 
 
 def get_vectors_for_data(data: Dict[str, List[List[GazeData]]]) -> Dict[str, List[Vector]]:
