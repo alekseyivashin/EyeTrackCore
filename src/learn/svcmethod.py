@@ -2,6 +2,7 @@ from typing import List
 
 import numpy as np
 from sklearn.model_selection import PredefinedSplit, GridSearchCV
+from sklearn.multiclass import OneVsRestClassifier
 from sklearn.svm import SVC
 
 from learn.utils import LearnUtils
@@ -9,7 +10,7 @@ from learn.utils import LearnUtils
 
 class SVCMethod:
 
-    def learn(self) -> List[int]:
+    def learn(self):
         labels, train_array, test_array = LearnUtils.get_learn_data()
 
         clf = self.get_classifier()
