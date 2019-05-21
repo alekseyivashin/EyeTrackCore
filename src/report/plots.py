@@ -1,12 +1,8 @@
-from inspect import signature
 from itertools import cycle
 
 import matplotlib.pyplot as plt
 import numpy as np
-from sklearn.calibration import CalibratedClassifierCV, calibration_curve
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import confusion_matrix, brier_score_loss, precision_score, recall_score, f1_score, \
-    precision_recall_curve, average_precision_score
+from sklearn.metrics import confusion_matrix
 from sklearn.utils.multiclass import unique_labels
 
 from learn.utils import LearnUtils
@@ -16,7 +12,7 @@ from report.reports import get_average_precision_score
 def plot_confusion_matrix(y_true, y_pred,
                           normalize=False,
                           title=None,
-                          cmap=plt.cm.Blues):
+                          cmap=plt.cm.get_cmap("YlOrRd")):
     """
     This function prints and plots the confusion matrix.
     Normalization can be applied by setting `normalize=True`.
@@ -56,7 +52,7 @@ def plot_confusion_matrix(y_true, y_pred,
              rotation_mode="anchor")
 
     # Loop over data dimensions and create text annotations.
-    fmt = '.2f' if normalize else 'd'
+    fmt = '.1f' if normalize else 'd'
     thresh = cm.max() / 2.
     for i in range(cm.shape[0]):
         for j in range(cm.shape[1]):
