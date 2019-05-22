@@ -26,12 +26,14 @@ def parse_file(filename: str) -> List[GazeData]:
 
 def open_file(file_name: AnyStr) -> IO:
     if file_name in get_file_names():
-        return open(os.path.join(os.getcwd(), "..", "resources", file_name), "r")
+        return open(os.path.join(os.getcwd(), "..", "resources", "source", file_name), "r")
     raise FileNotFoundError(f"File {file_name} is not found!")
 
 
 def get_file_names() -> List[str]:
     os.chdir("..")
-    file_names = os.listdir("resources")
+    os.chdir("resources")
+    file_names = os.listdir("source")
+    os.chdir("..")
     os.chdir("src")
     return file_names
