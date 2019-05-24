@@ -165,22 +165,22 @@ def draw_heatmap(fixations: List[Fixation], dispsize: Tuple[int, int], imagefile
 
     # HEATMAP
     # Gaussian
-    gwh = 200
+    gwh = 600
     gsdwh = gwh / 6
     gaus = gaussian(gwh, gsdwh)
     # matrix of zeroes
-    strt = gwh / 2
+    strt = int(gwh / 2)
     heatmapsize = int(dispsize[1] + 2 * strt), int(dispsize[0] + 2 * strt)
     heatmap = numpy.zeros(heatmapsize, dtype=float)
     # create heatmap
     for i in range(0, len(fix['dur'])):
         # get x and y coordinates
-        x = strt + fix['x'][i] - int(gwh / 2)
-        y = strt + fix['y'][i] - int(gwh / 2)
+        x = int(strt + fix['x'][i] - int(gwh / 2))
+        y = int(strt + fix['y'][i] - int(gwh / 2))
         # correct Gaussian size if either coordinate falls outside of
         # display boundaries
         if (not 0 < x < dispsize[0]) or (not 0 < y < dispsize[1]):
-            hadj = [0, gwh];
+            hadj = [0, gwh]
             vadj = [0, gwh]
             if 0 > x:
                 hadj[0] = abs(x)
@@ -355,7 +355,7 @@ def draw_display(dispsize, imagefile=None):
     """
 
     # construct screen (black background)
-    screen = numpy.zeros((dispsize[1], dispsize[0], 3), dtype='uint8')
+    screen = numpy.zeros((dispsize[1], dispsize[0], 4), dtype='float32')
     # if an image location has been passed, draw the image
     if imagefile != None:
         # check if the path to the image exists
@@ -366,13 +366,11 @@ def draw_display(dispsize, imagefile=None):
         # flip image over the horizontal axis
         # (do not do so on Windows, as the image appears to be loaded with
         # the correct side up there; what's up with that? :/)
-        if not os.name == 'nt':
-            img = numpy.flipud(img)
         # width and height of the image
         w, h = len(img[0]), len(img)
         # x and y position of the image on the display
-        x = dispsize[0] / 2 - w / 2
-        y = dispsize[1] / 2 - h / 2
+        x = int(dispsize[0] / 2 - w / 2)
+        y = int(dispsize[1] / 2 - h / 2)
         # draw the image on the screen
         screen[y:y + h, x:x + w, :] += img
     # dots per inch

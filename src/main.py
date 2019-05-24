@@ -1,5 +1,6 @@
 import warnings
 
+from classifiers.draw import draw_heatmap
 from learn.decision_tree import DecisionTree
 
 warnings.filterwarnings("ignore", category=FutureWarning)
@@ -31,6 +32,7 @@ from report.plots import plot_confusion_matrix, plot_precision_recall_curve, plo
 from report.reports import print_classification_report
 
 DISPLAY_SIZE = 1920, 1080
+FIXATIONS = []
 
 
 def main():
@@ -112,8 +114,8 @@ def main():
     # fig.show()
     # fig1 = plot_confusion_matrix(y_test, knn_result, normalize=True,
     #                              title=f'Матрица смещения для метода "K ближайших соседей"\nТочность оценки: {knn_score:.2f}')
-    fig2 = plot_confusion_matrix(y_test, svc_pred, normalize=True,
-                                 title=f'Матрица смещения для метода опорных векторов\nТочность оценки: {svc_acc_score:.2f}')
+    # fig2 = plot_confusion_matrix(y_test, svc_pred, normalize=True,
+    #                              title=f'Матрица смещения для метода опорных векторов\nТочность оценки: {svc_acc_score:.2f}')
     # fig3 = plot_confusion_matrix(y_test, random_forest_result, normalize=True,
     #                              title=f'Матрица смещения для метода случайного леса\nТочность оценки: {random_forest_score:.2f}')
     # fig4 = plot_confusion_matrix(y_test, gaussian_result, normalize=True,
@@ -121,7 +123,7 @@ def main():
     # fig5 = plot_confusion_matrix(y_test, bayes_result, normalize=True,
     #                              title=f'Матрица смещения для метода найвного Байеса\nТочность оценки: {bayes_score:.2f}')
     # fig1.show()
-    fig2.show()
+    # fig2.show()
     # fig3.show()
     # fig4.show()
     # fig5.show()
@@ -131,6 +133,10 @@ def main():
     # plot_scanpath = draw_scanpath(fixations, saccades, display_size)
     # plot_fixations.show()
     # plot_scanpath.show()
+    for f in FIXATIONS[::6]:
+        fig_heatmap = draw_heatmap(f, DISPLAY_SIZE, "../resources/images/text_screen.png")
+        fig_heatmap.show()
+
 
 def run_multiple_times(method, encoded_labels, times):
     score = []
@@ -151,11 +157,12 @@ def processing_data(gaze_data_list: List[GazeData]) -> Vector:
     x_array, y_array = positions_to_numpy_array(list(map(lambda data: data.average_display_coordinate, gaze_data_list)),
                                                 DISPLAY_SIZE)
     time_array = time_to_numpy_array(list(map(lambda data: data.system_time_stamp, gaze_data_list)))
-    fixations = FixationsGroup.get(fixation_detection(x_array, y_array, time_array))
-    saccades = SaccadesGroup.get(saccade_detection(x_array, y_array, time_array))
-    user_positions = UserPositionGroup.get(list(map(lambda data: data.average_user_coordinate, gaze_data_list)),
-                                           time_array)
-    return get_features_vector(fixations, saccades, user_positions)
+    fixations = fixation_detection(x_array, y_array, time_array)
+    FIXATIONS.append(fixations)
+    saccades = saccade_detection(x_array, y_array, time_array)
+    user_positions = list(map(lambda data: data.average_user_coordinate, gaze_data_list))
+    return get_features_vector(FixationsGroup.get(fixations), SaccadesGroup.get(saccades),
+                               UserPositionGroup.get(user_positions, time_array))
 
 
 if __name__ == '__main__':
