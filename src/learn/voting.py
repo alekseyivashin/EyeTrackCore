@@ -74,11 +74,11 @@ class Voting:
 
         return VotingClassifier(
             estimators=[
-                # ("knn", knn),
+                ("knn", knn),
                 ("svc", svc),
-                # ("rf", random_forest),
+                ("rf", random_forest),
                 ("gaus", gaussian),
-                # ("dt", decision_tree),
-                # ("bayes", bayes)
+                ("dt", decision_tree),
+                ("bayes", bayes)
             ],
             voting="soft")

@@ -12,7 +12,7 @@ from report.reports import get_average_precision_score
 def plot_confusion_matrix(y_true, y_pred,
                           normalize=False,
                           title=None,
-                          cmap=plt.cm.get_cmap("YlOrRd")):
+                          cmap=plt.cm.get_cmap("Reds")):
     """
     This function prints and plots the confusion matrix.
     Normalization can be applied by setting `normalize=True`.
@@ -35,7 +35,7 @@ def plot_confusion_matrix(y_true, y_pred,
 
     # print(cm)
 
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(10, 8))
     im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
     ax.figure.colorbar(im, ax=ax)
     # We want to show all ticks...
