@@ -33,3 +33,4 @@ class SVCMethod:
 
     def get_classifier(self):
         return SVC(kernel="rbf", C=10, gamma=1, probability=True)
+        # return SVC(probability=True)

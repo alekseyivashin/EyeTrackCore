@@ -78,25 +78,28 @@ def main():
     # a = 1
 
     # ----------------------CLASSIFICATION--------------------#
-    # knn_result = knn.learn()
-    # knn_score = accuracy_score(y_test, knn_result)
-    #
+    knn_result = knn.learn()
+    knn_score = accuracy_score(y_test, knn_result)
+
     svc_pred = svc.learn()
     svc_acc_score = accuracy_score(y_test, svc_pred)
     a = 1
-    #
-    # random_forest_result = random_forest.learn()
-    # random_forest_score = accuracy_score(y_test, random_forest_result)
-    #
-    # gaussian_result = gaussian.learn()
-    # gaussian_score = accuracy_score(y_test, gaussian_result)
-    #
-    # decision_tree_result = decision_tree.learn()
-    # decision_tree_score = accuracy_score(y_test, decision_tree_result)
-    #
-    # bayes_result = bayes.learn()
-    # bayes_score = accuracy_score(y_test, bayes_result)
-    # a = 1
+
+    random_forest_result = random_forest.learn()
+    random_forest_score = accuracy_score(y_test, random_forest_result)
+
+    gaussian_result = gaussian.learn()
+    gaussian_score = accuracy_score(y_test, gaussian_result)
+
+    decision_tree_result = decision_tree.learn()
+    decision_tree_score = accuracy_score(y_test, decision_tree_result)
+
+    bayes_result = bayes.learn()
+    bayes_score = accuracy_score(y_test, bayes_result)
+
+    voting_result = voting.learn()
+    voting_score = accuracy_score(y_test, bayes_result)
+    a = 1
 
     # ----------------------CLASSIFICATION MULTIPLE TIMES-----#
     # knn_score = run_multiple_times(knn, y_test, times)
@@ -133,9 +136,9 @@ def main():
     # plot_scanpath = draw_scanpath(fixations, saccades, display_size)
     # plot_fixations.show()
     # plot_scanpath.show()
-    for f in FIXATIONS[::6]:
-        fig_heatmap = draw_heatmap(f, DISPLAY_SIZE, "../resources/images/text_screen.png")
-        fig_heatmap.show()
+    # for f in FIXATIONS[::6]:
+    #     fig_heatmap = draw_heatmap(f, DISPLAY_SIZE, "../resources/images/text_screen.png")
+    #     fig_heatmap.show()
 
 
 def run_multiple_times(method, encoded_labels, times):

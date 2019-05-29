@@ -37,3 +37,4 @@ class DecisionTree:
 
     def get_classifier(self):
         return DecisionTreeClassifier(criterion="gini", max_depth=None, min_samples_leaf=1, min_samples_split=2, splitter="best")
+        # return DecisionTreeClassifier()
