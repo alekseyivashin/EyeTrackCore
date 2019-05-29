@@ -53,8 +53,9 @@ def main():
     bayes = Bayes()
     voting = Voting()
     # ----------------------VOTING LEARN----------------------#
-    # voting_result = run_multiple_times(voting, y_test, times)
-    # a = 1
+    voting_result = voting.learn()
+    voting_score = accuracy_score(y_test, voting_result)
+    a = 1
 
     # ----------------------VOTING FEATURE SELECTION----------#
     # scores = {}
@@ -91,14 +92,8 @@ def main():
     gaussian_result = gaussian.learn()
     gaussian_score = accuracy_score(y_test, gaussian_result)
 
-    decision_tree_result = decision_tree.learn()
-    decision_tree_score = accuracy_score(y_test, decision_tree_result)
-
     bayes_result = bayes.learn()
     bayes_score = accuracy_score(y_test, bayes_result)
-
-    voting_result = voting.learn()
-    voting_score = accuracy_score(y_test, bayes_result)
     a = 1
 
     # ----------------------CLASSIFICATION MULTIPLE TIMES-----#
@@ -112,24 +107,30 @@ def main():
 
     #
     # # ----------------------CONFUSION MATRIX----------------------#
-    # fig = plot_confusion_matrix(y_test, voting_result, normalize=True,
-    #                             title=f'Матрица смещения для обобщенных методов\nТочность оценки: {voting_score:.2f}')
+    fig = plot_confusion_matrix(y_test, voting_result, normalize=True,
+                                title=f'Матрица смещения для обобщенных методов\nТочность оценки: {voting_score:.2f}')
     # fig.show()
-    # fig1 = plot_confusion_matrix(y_test, knn_result, normalize=True,
-    #                              title=f'Матрица смещения для метода "K ближайших соседей"\nТочность оценки: {knn_score:.2f}')
-    # fig2 = plot_confusion_matrix(y_test, svc_pred, normalize=True,
-    #                              title=f'Матрица смещения для метода опорных векторов\nТочность оценки: {svc_acc_score:.2f}')
-    # fig3 = plot_confusion_matrix(y_test, random_forest_result, normalize=True,
-    #                              title=f'Матрица смещения для метода случайного леса\nТочность оценки: {random_forest_score:.2f}')
-    # fig4 = plot_confusion_matrix(y_test, gaussian_result, normalize=True,
-    #                              title=f'Матрица смещения для метода преобразования Гаусса\nТочность оценки: {gaussian_score:.2f}')
-    # fig5 = plot_confusion_matrix(y_test, bayes_result, normalize=True,
-    #                              title=f'Матрица смещения для метода найвного Байеса\nТочность оценки: {bayes_score:.2f}')
+    fig1 = plot_confusion_matrix(y_test, knn_result, normalize=True,
+                                 title=f'Матрица смещения для метода "K ближайших соседей"\nТочность оценки: {knn_score:.2f}')
+    fig2 = plot_confusion_matrix(y_test, svc_pred, normalize=True,
+                                 title=f'Матрица смещения для метода опорных векторов\nТочность оценки: {svc_acc_score:.2f}')
+    fig3 = plot_confusion_matrix(y_test, random_forest_result, normalize=True,
+                                 title=f'Матрица смещения для метода случайного леса\nТочность оценки: {random_forest_score:.2f}')
+    fig4 = plot_confusion_matrix(y_test, gaussian_result, normalize=True,
+                                 title=f'Матрица смещения для метода преобразования Гаусса\nТочность оценки: {gaussian_score:.2f}')
+    fig5 = plot_confusion_matrix(y_test, bayes_result, normalize=True,
+                                 title=f'Матрица смещения для метода найвного Байеса\nТочность оценки: {bayes_score:.2f}')
     # fig1.show()
     # fig2.show()
     # fig3.show()
     # fig4.show()
     # fig5.show()
+    fig.savefig("../output/clear/voting.png")
+    fig1.savefig("../output/clear/knn.png")
+    fig2.savefig("../output/clear/svc.png")
+    fig3.savefig("../output/clear/random_forest.png")
+    fig4.savefig("../output/clear/gaussian.png")
+    fig5.savefig("../output/clear/bayes.png")
 
     a = 1
     # plot_fixations = draw_fixations(fixations, display_size)
