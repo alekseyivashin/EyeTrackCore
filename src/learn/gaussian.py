@@ -35,5 +35,5 @@ class Gaussian:
         return grid
 
     def get_classifier(self):
-        # return GaussianProcessClassifier(kernel=DotProduct(), max_iter_predict=10, n_restarts_optimizer=0)
-        return GaussianProcessClassifier()
+        return GaussianProcessClassifier(kernel=DotProduct(), max_iter_predict=10, n_restarts_optimizer=0)
+        # return GaussianProcessClassifier()

@@ -23,4 +23,5 @@ class Vector:
                       self.average_user_position_x,
                       self.average_user_position_y,
                       self.average_user_position_z,
-                      self.average_user_velocity])
+                      self.average_user_velocity
+                      ])

@@ -14,7 +14,7 @@ from learn.utils import LearnUtils
 
 
 class Voting:
-    __n_neighbors = 5
+    __n_neighbors = 7
     __feature_methods = {
         "k_chi_3": SelectKBest(chi2, k=3),
         "k_chi_4": SelectKBest(chi2, k=4),

@@ -19,7 +19,8 @@ def get_features_vector(fixations: FixationsGroup, saccades: SaccadesGroup,
                   np.abs(user_x),
                   np.abs(user_y),
                   np.abs(user_z),
-                  get_average_user_velocity(user_positions))
+                  get_average_user_velocity(user_positions)
+                  )
 
 
 def get_count_of_fixations(fixations: FixationsGroup) -> int:
