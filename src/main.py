@@ -37,7 +37,7 @@ def main():
     print("Process started")
     data = parser.parse_all()
     print("Reading and parsing completed")
-    data = {i: data[i] for i in list(data.keys())[3::2]}
+    # data = {i: data[i] for i in list(data.keys())[3::2]}
     vectors = get_vectors_for_data(data)
     print("Vectors created")
     LearnUtils.set_up(vectors, test_indexes=[1, 4])
@@ -115,11 +115,11 @@ def main():
     # fig3.show()
     # fig4.show()
     # fig5.show()
-    fig.savefig("../output/clear/voting.png")
-    fig1.savefig("../output/clear/knn.png")
-    fig2.savefig("../output/clear/svc.png")
-    fig3.savefig("../output/clear/random_forest.png")
-    fig5.savefig("../output/clear/bayes.png")
+    fig.savefig("../output/optimized/voting.png")
+    fig1.savefig("../output/optimized/knn.png")
+    fig2.savefig("../output/optimized/svc.png")
+    fig3.savefig("../output/optimized/random_forest.png")
+    fig5.savefig("../output/optimized/bayes.png")
 
     a = 1
     # plot_fixations = draw_fixations(fixations, display_size)
