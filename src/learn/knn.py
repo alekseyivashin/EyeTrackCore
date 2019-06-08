@@ -8,7 +8,7 @@ from learn.utils import LearnUtils
 
 
 class KNN:
-    n_neighbors = 5
+    n_neighbors = 7
 
     def learn(self) -> List[int]:
         labels, train_array, test_array = LearnUtils.get_learn_data()

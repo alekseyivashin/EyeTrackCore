@@ -5,8 +5,6 @@ from sklearn.feature_selection import SelectKBest, chi2, f_classif, mutual_info_
 from sklearn.model_selection import cross_val_score
 
 from learn.bayes import Bayes
-from learn.decision_tree import DecisionTree
-from learn.gaussian import Gaussian
 from learn.knn import KNN
 from learn.random_forest import RandomForest
 from learn.svcmethod import SVCMethod
@@ -68,8 +66,6 @@ class Voting:
         knn = KNN().get_classifier()
         svc = SVCMethod().get_classifier()
         random_forest = RandomForest().get_classifier()
-        gaussian = Gaussian().get_classifier()
-        decision_tree = DecisionTree().get_classifier()
         bayes = Bayes().get_classifier()
 
         return VotingClassifier(
@@ -77,8 +73,6 @@ class Voting:
                 ("knn", knn),
                 ("svc", svc),
                 ("rf", random_forest),
-                ("gaus", gaussian),
-                ("dt", decision_tree),
                 ("bayes", bayes)
             ],
             voting="soft")

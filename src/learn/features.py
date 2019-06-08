@@ -16,10 +16,10 @@ def get_features_vector(fixations: FixationsGroup, saccades: SaccadesGroup,
                   get_average_duration_of_fixations(fixations),
                   get_average_horizontal_amplitude_of_saccades(saccades),
                   get_average_velocity_of_saccades(saccades),
-                  np.abs(user_x),
-                  np.abs(user_y),
-                  np.abs(user_z),
-                  get_average_user_velocity(user_positions)
+                  # np.abs(user_x),
+                  # np.abs(user_y),
+                  # np.abs(user_z),
+                  # get_average_user_velocity(user_positions)
                   )
 
 

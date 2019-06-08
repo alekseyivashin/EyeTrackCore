@@ -34,5 +34,5 @@ class RandomForest:
         return grid
 
     def get_classifier(self):
-        # return RandomForestClassifier()
-        return RandomForestClassifier(criterion="entropy", max_depth=4, max_features="sqrt", n_estimators=200)
+        return RandomForestClassifier()
+        # return RandomForestClassifier(criterion="entropy", max_depth=4, max_features="sqrt", n_estimators=200)

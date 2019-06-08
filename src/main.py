@@ -1,7 +1,6 @@
 import warnings
 
 from classifiers.draw import draw_heatmap
-from learn.decision_tree import DecisionTree
 
 warnings.filterwarnings("ignore", category=FutureWarning)
 
@@ -21,7 +20,6 @@ from classifiers.utils import time_to_numpy_array
 from json_parser.mapper import GazeData
 from learn.bayes import Bayes
 from learn.features import get_features_vector
-from learn.gaussian import Gaussian
 from learn.knn import KNN
 from learn.random_forest import RandomForest
 from learn.svcmethod import SVCMethod
@@ -39,6 +37,7 @@ def main():
     print("Process started")
     data = parser.parse_all()
     print("Reading and parsing completed")
+    data = {i: data[i] for i in list(data.keys())[3::2]}
     vectors = get_vectors_for_data(data)
     print("Vectors created")
     LearnUtils.set_up(vectors, test_indexes=[1, 4])
@@ -48,8 +47,6 @@ def main():
     knn = KNN()
     svc = SVCMethod()
     random_forest = RandomForest()
-    gaussian = Gaussian()
-    decision_tree = DecisionTree()
     bayes = Bayes()
     voting = Voting()
     # ----------------------VOTING LEARN----------------------#
@@ -75,7 +72,6 @@ def main():
     # svc_grid_result = svc.grid()
     # random_forest_grid_result = random_forest.grid()
     # gaussian_grid_result = gaussian.grid()
-    # decision_tree_grid_result = decision_tree.grid()
     # a = 1
 
     # ----------------------CLASSIFICATION--------------------#
@@ -84,13 +80,11 @@ def main():
 
     svc_pred = svc.learn()
     svc_acc_score = accuracy_score(y_test, svc_pred)
+    print_classification_report(y_test, svc_pred, LearnUtils.get_labels())
     a = 1
 
     random_forest_result = random_forest.learn()
     random_forest_score = accuracy_score(y_test, random_forest_result)
-
-    gaussian_result = gaussian.learn()
-    gaussian_score = accuracy_score(y_test, gaussian_result)
 
     bayes_result = bayes.learn()
     bayes_score = accuracy_score(y_test, bayes_result)
@@ -101,25 +95,21 @@ def main():
     # svc_score = run_multiple_times(svc, y_test, times)
     # random_forest_score = run_multiple_times(random_forest, y_test, times)
     # gaussian_score = run_multiple_times(gaussian, y_test, times)
-    # decision_tree_score = run_multiple_times(decision_tree, y_test, times)
     # bayes_score = run_multiple_times(bayes, y_test, times)
     a = 1
 
     #
     # # ----------------------CONFUSION MATRIX----------------------#
     fig = plot_confusion_matrix(y_test, voting_result, normalize=True,
-                                title=f'Матрица смещения для обобщенных методов\nТочность оценки: {voting_score:.2f}')
-    # fig.show()
+                                title=f'Матрица ошибок для обобщенных методов\nТочность оценки: {voting_score:.2f}')
     fig1 = plot_confusion_matrix(y_test, knn_result, normalize=True,
-                                 title=f'Матрица смещения для метода "K ближайших соседей"\nТочность оценки: {knn_score:.2f}')
+                                 title=f'Матрица ошибок для метода "K ближайших соседей"\nТочность оценки: {knn_score:.2f}')
     fig2 = plot_confusion_matrix(y_test, svc_pred, normalize=True,
-                                 title=f'Матрица смещения для метода опорных векторов\nТочность оценки: {svc_acc_score:.2f}')
+                                 title=f'Матрица ошибок для метода опорных векторов\nТочность оценки: {svc_acc_score:.2f}')
     fig3 = plot_confusion_matrix(y_test, random_forest_result, normalize=True,
-                                 title=f'Матрица смещения для метода случайного леса\nТочность оценки: {random_forest_score:.2f}')
-    fig4 = plot_confusion_matrix(y_test, gaussian_result, normalize=True,
-                                 title=f'Матрица смещения для метода преобразования Гаусса\nТочность оценки: {gaussian_score:.2f}')
+                                 title=f'Матрица ошибок для метода случайного леса\nТочность оценки: {random_forest_score:.2f}')
     fig5 = plot_confusion_matrix(y_test, bayes_result, normalize=True,
-                                 title=f'Матрица смещения для метода найвного Байеса\nТочность оценки: {bayes_score:.2f}')
+                                 title=f'Матрица ошибок для метода найвного Байеса\nТочность оценки: {bayes_score:.2f}')
     # fig1.show()
     # fig2.show()
     # fig3.show()
@@ -129,7 +119,6 @@ def main():
     fig1.savefig("../output/clear/knn.png")
     fig2.savefig("../output/clear/svc.png")
     fig3.savefig("../output/clear/random_forest.png")
-    fig4.savefig("../output/clear/gaussian.png")
     fig5.savefig("../output/clear/bayes.png")
 
     a = 1
